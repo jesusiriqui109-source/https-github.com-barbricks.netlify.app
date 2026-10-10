@@ -1,0 +1,48 @@
+﻿{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar sesión | BARBRICKS</title>
+    <link rel="stylesheet" href="{% static 'css/cuenta.css' %}">
+</head>
+<body>
+    <main class="account-page">
+        <a class="brand" href="{% url 'inicio' %}">✂ <span>BARBRICKS</span></a>
+
+        <section class="account-card">
+            <p class="eyebrow">BIENVENIDO DE VUELTA</p>
+            <h1>Iniciar <span>sesión</span></h1>
+            <p class="subtitle">Entra a tu cuenta para continuar.</p>
+
+            <form method="post" class="account-form">
+                {% csrf_token %}
+
+                {% if form.non_field_errors %}
+                    <div class="errors">{{ form.non_field_errors }}</div>
+                {% endif %}
+
+                {% for field in form %}
+                    <label for="{{ field.id_for_label }}">
+                        {{ field.label }}
+                        {{ field }}
+                    </label>
+                    {% for error in field.errors %}
+                        <p class="field-error">{{ error }}</p>
+                    {% endfor %}
+                {% endfor %}
+
+                <button type="submit">INICIAR SESIÓN →</button>
+            </form>
+
+            <p class="switch-account">
+                ¿No tienes cuenta?
+                <a href="{% url 'registro' %}">Regístrate aquí</a>
+            </p>
+
+            <a class="back-link" href="{% url 'inicio' %}">← Volver al inicio</a>
+        </section>
+    </main>
+</body>
+</html>

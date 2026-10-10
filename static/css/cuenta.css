@@ -1,0 +1,165 @@
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    background: #050814;
+    color: #f5f7ff;
+    font-family: Arial, sans-serif;
+}
+
+.account-page {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 28px 16px;
+    gap: 25px;
+}
+
+.brand {
+    color: #fff;
+    text-decoration: none;
+    font-size: 25px;
+    font-weight: 900;
+    letter-spacing: 2px;
+}
+
+.brand span {
+    color: #168cff;
+}
+
+.account-card {
+    width: 100%;
+    max-width: 440px;
+    padding: 32px;
+    border: 1px solid #202c43;
+    border-radius: 18px;
+    background: #0b1020;
+    box-shadow: 0 0 35px #168cff12;
+}
+
+.eyebrow {
+    color: #ff4258;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 2px;
+}
+
+h1 {
+    margin: 12px 0;
+    font-size: clamp(28px, 6vw, 38px);
+}
+
+h1 span {
+    color: #168cff;
+}
+
+.subtitle {
+    color: #aab3c8;
+    line-height: 1.6;
+    margin-bottom: 25px;
+}
+
+.account-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.account-form label {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    color: #e8edfa;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.account-form input {
+    width: 100%;
+    min-width: 0;
+    padding: 13px;
+    border: 1px solid #303b54;
+    border-radius: 9px;
+    background: #070b16;
+    color: white;
+    font: inherit;
+}
+
+.account-form input:focus {
+    outline: 2px solid #168cff;
+    border-color: transparent;
+}
+
+.account-form button {
+    width: 100%;
+    min-height: 48px;
+    margin-top: 8px;
+    border: 0;
+    border-radius: 9px;
+    background: #ff334f;
+    color: white;
+    font-weight: 900;
+    cursor: pointer;
+}
+
+.account-form button:hover {
+    background: #e8213e;
+}
+
+.switch-account {
+    margin-top: 24px;
+    color: #b7bfd0;
+    text-align: center;
+    line-height: 1.8;
+}
+
+.switch-account a,
+.back-link {
+    color: #168cff;
+    text-decoration: none;
+}
+
+.back-link {
+    display: block;
+    margin-top: 20px;
+    text-align: center;
+}
+
+.errors,
+.field-error {
+    color: #ff6878;
+    font-size: 13px;
+}
+
+.help-text {
+    color: #98a5bd;
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+.help-text ul {
+    padding-left: 20px;
+}
+
+@media (max-width: 480px) {
+    .account-page {
+        justify-content: flex-start;
+        padding: 28px 14px;
+    }
+
+    .account-card {
+        padding: 23px 19px;
+        border-radius: 14px;
+    }
+
+    .account-form input,
+    .account-form button {
+        font-size: 16px;
+    }
+}
