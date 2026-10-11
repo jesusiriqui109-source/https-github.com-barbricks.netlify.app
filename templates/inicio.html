@@ -173,11 +173,12 @@
                         <input type="tel" name="telefono" placeholder="Tu número de teléfono" required>
                     </label>
 
+
 <label for="servicio">Elige tu servicio</label>
 <select name="servicio" id="servicio" required>
     <option value="">Selecciona un servicio</option>
     {% for servicio in servicios %}
-        <option value="{{ servicio.nombre }}">
+        <option value="{{ servicio.id }}">
             {{ servicio.nombre }} — ${{ servicio.precio }}
         </option>
     {% endfor %}
@@ -188,9 +189,12 @@
 <select name="barbero" id="barbero" required>
     <option value="">Selecciona un barbero</option>
     {% for barbero in barberos %}
-        <option value="{{ barbero.nombre }}">{{ barbero.nombre }}</option>
+        {% if barbero.nombre != "Por asignar" %}
+            <option value="{{ barbero.id }}">{{ barbero.nombre }}</option>
+        {% endif %}
     {% endfor %}
 </select>
+
 
                     <label>Fecha
                         <input type="date" name="fecha" id="bookingDate" required>

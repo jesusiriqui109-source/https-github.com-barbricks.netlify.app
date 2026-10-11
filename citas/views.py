@@ -1,11 +1,6 @@
-﻿
-from datetime import date, time
-
+﻿from datetime import date, time
 from django.shortcuts import render
-from django.db import transaction
-
 from .models import Cliente, Servicio, Barbero, Cita
-
 
 def inicio(request):
     mensaje = ""
@@ -14,18 +9,14 @@ def inicio(request):
     if request.method == "POST":
         nombre = request.POST.get("nombre", "").strip()
         telefono = request.POST.get("telefono", "").strip()
-        nombre_servicio = request.POST.get("servicio", "").strip()
-        nombre_barbero = request.POST.get("barbero", "").strip()
+        servicio_id = request.POST.get("servicio", "").strip()
+        barbero_id = request.POST.get("barbero", "").strip()
         fecha_texto = request.POST.get("fecha", "").strip()
         hora_texto = request.POST.get("hora", "").strip()
 
         if not all([
-            nombre,
-            telefono,
-            nombre_servicio,
-            nombre_barbero,
-            fecha_texto,
-            hora_texto,
+            nombre, telefono, servicio_id,
+            barbero_id, fecha_texto, hora_texto
         ]):
             mensaje = "Completa todos los campos."
             tipo_mensaje = "error"
@@ -39,27 +30,28 @@ def inicio(request):
                 fecha_cita = date.fromisoformat(fecha_texto)
                 hora_cita = time.fromisoformat(hora_texto)
 
+                servicio = Servicio.objects.filter(
+                    pk=int(servicio_id),
+                    activo=True
+                ).first()
+
+                barbero = Barbero.objects.filter(
+                    pk=int(barbero_id),
+                    activo=True
+                ).exclude(nombre="Por asignar").first()
+
                 if fecha_cita < date.today():
-                    raise ValueError
+                    mensaje = "No puedes reservar una fecha pasada."
+                    tipo_mensaje = "error"
 
-                with transaction.atomic():
-                    servicio, _ = Servicio.objects.get_or_create(
-                        nombre=nombre_servicio,
-                        defaults={
-                            "precio": 0,
-                            "duracion_minutos": 30,
-                            "activo": True,
-                        },
-                    )
+                elif servicio is None or barbero is None:
+                    mensaje = "Selecciona un servicio y un barbero válidos."
+                    tipo_mensaje = "error"
 
-                    barbero, _ = Barbero.objects.get_or_create(
-                        nombre=nombre_barbero,
-                        defaults={"activo": True},
-                    )
-
+                else:
                     cliente, creado = Cliente.objects.get_or_create(
                         telefono=telefono,
-                        defaults={"nombre": nombre},
+                        defaults={"nombre": nombre}
                     )
 
                     if not creado and cliente.nombre != nombre:
@@ -71,27 +63,27 @@ def inicio(request):
                         barbero=barbero,
                         servicio=servicio,
                         fecha=fecha_cita,
-                        hora=hora_cita,
+                        hora=hora_cita
                     )
 
-                mensaje = (
-                    "¡Cita registrada correctamente! "
-                    "Tus datos se guardaron."
-                )
-                tipo_mensaje = "exito"
+                    mensaje = (
+                        "¡Cita registrada correctamente! "
+                        "Tus datos se guardaron."
+                    )
+                    tipo_mensaje = "exito"
 
-            except ValueError:
-                mensaje = "La fecha o la hora no son válidas."
+            except (ValueError, TypeError):
+                mensaje = "La fecha, hora o selección no es válida."
                 tipo_mensaje = "error"
-
 
     return render(request, "inicio.html", {
         "mensaje": mensaje,
         "tipo_mensaje": tipo_mensaje,
-        "barberos": Barbero.objects.filter(activo=True),
+        "barberos": Barbero.objects.filter(activo=True).exclude(
+            nombre="Por asignar"
+        ),
         "servicios": Servicio.objects.filter(activo=True),
     })
-
 
 from django.contrib.auth import login, logout
 from django.contrib.auth.forms import AuthenticationForm
